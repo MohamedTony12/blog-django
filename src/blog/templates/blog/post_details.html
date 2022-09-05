@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}blog home{% endblock title %}
+{% block content_main %}
+<div class="row">
+<div class="col-12">
+<h2 class="my-0">{{post_detail.title|title}}</h2>
+<small class="text-primary mb-2"> write by : {{post_detail.author|title}} Created at : <span>{{post_detail.create_at|date:'y - m -d'}}</span></small>
+<p class="text-body">{{post_detail.content|capfirst}} <a class="text-bg-success px-2" href="{% url 'blog:blog_home' %}">Home back </a></p>
+</div>
+<hr>
+</div>
+<div class="row">
+    <div class="col-12">
+        <h3 class="text-bg-secondary text-center py-1 ">Comments</h3>
+    </div>
+</div>
+{% endblock content_main %}
