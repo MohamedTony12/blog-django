@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block title %}blog home{% endblock title %}
 {% block content_main %}
 <div class="row">
@@ -9,9 +10,33 @@
 </div>
 <hr>
 </div>
+
 <div class="row">
     <div class="col-12">
         <h3 class="text-bg-secondary text-center py-1 ">Comments</h3>
+        <div class="row">
+            {% for commnet in comments %}
+            <div class="col-12 shadow py-2 ">
+                <p class="my-0 text-capitalize">{{commnet.username}}</p>
+                <p>{{commnet.email}}</p>
+                <p>{{commnet.comment_text|truncatechars:'100'|capfirst}}
+                    <a href="{% url 'blog:read_comment' commnet.id  post_detail.id %}" class="comment-text">read more</a>
+                </p>
+            </div>
+            {% empty %}
+            <p>no comment yet</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 shadow p-3 mt-3">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form|crispy}}
+            <input type="submit" value="commnet" class="btn btn-secondary w-100 my-2">
+        </form>
     </div>
 </div>
 {% endblock content_main %}
+

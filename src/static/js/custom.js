@@ -2,6 +2,7 @@ const search_btn = document.querySelector('.search');
 const search_input = document.querySelector('#search-input')
 const overlay = document.querySelector('.overlay')
 
+
 search_btn.addEventListener('click',()=>{
     console.log('work');
     search_input.classList.add('show-in')
