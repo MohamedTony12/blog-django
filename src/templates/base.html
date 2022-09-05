@@ -41,13 +41,22 @@
             <ul class="navbar-nav me-2 mb-2 mb-lg-0">
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  account
+                  {% if user.is_authenticated %}
+                  Hello : {{user}}
+                  {% else %}
+                  Account
+                  {% endif %}
                 </a>
                 <ul class="dropdown-menu mt-3">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  {% if user.is_authenticated %}
+                  <li><a class="dropdown-item" href="{% url 'user:user_logout' %}">logout</a></li>
+                  <li><a class="dropdown-item" href="#">profile</a></li>
+                  {% else %}
+                  <li><a class="dropdown-item" href="{% url 'user:user_login' %}">login</a></li>
+                  <li><a class="dropdown-item" href="{% url 'user:user_register' %}">registe</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  {% endif %}
                 </ul>
               </li>
             </ul>
@@ -59,6 +68,15 @@
           </div>
         </div>
       </nav>
+      <div class="container mt-3">
+        {% for message in messages %}
+        <div class="container-fluid p-0">
+          <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+            {{ message|capfirst }}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
       <div class="container">
         <div class="row mt-4 p-4">
           <div class="col-md-4 mx-auto my-2">
@@ -93,6 +111,10 @@
           </div>
           
         </div>
+      </div>
+
+      <div class="continer">
+        {% block account %}{% endblock account %}
       </div>
 
     <div class="container">

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}login{% endblock title %}
+{% block  sidebar %}{% endblock sidebar %}
+{% block content_main %}
+{% endblock content_main %}
+{% block account %}
+<div class="container mx-auto">
+    <div class="row mx-auto">
+        <div class="col-md-6 col-lg-6 shadow p-3 mx-auto">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{form|crispy}}
+                <input type="submit" value="Create User" class="btn btn-secondary w-100 my-2">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock account %}

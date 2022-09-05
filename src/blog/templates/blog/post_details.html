@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block title %}blog home{% endblock title %}
+{% block title %}{{post_detail.title|title}}{% endblock title %}
 {% block content_main %}
 <div class="row">
 <div class="col-12">
