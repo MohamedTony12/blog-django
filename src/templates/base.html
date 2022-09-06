@@ -49,13 +49,14 @@
                 </a>
                 <ul class="dropdown-menu mt-3">
                   {% if user.is_authenticated %}
-                  <li><a class="dropdown-item" href="{% url 'user:user_logout' %}">logout</a></li>
-                  <li><a class="dropdown-item" href="#">profile</a></li>
+                  <li><a class="dropdown-item text-capitalize" href="{% url 'user:user_logout' %}">logout</a></li>
+                  <li><a class="dropdown-item text-capitalize" href="{% url 'user:user_profile' %}">profile</a></li>
+                  <li><a class="dropdown-item text-capitalize" href="#">create new post</a></li>
                   {% else %}
-                  <li><a class="dropdown-item" href="{% url 'user:user_login' %}">login</a></li>
-                  <li><a class="dropdown-item" href="{% url 'user:user_register' %}">registe</a></li>
+                  <li><a class="dropdown-item text-capitalize" href="{% url 'user:user_login' %}">login</a></li>
+                  <li><a class="dropdown-item text-capitalize" href="{% url 'user:user_register' %}">registe</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  <li><a class="dropdown-item text-capitalize" href="#">Something else here</a></li>
                   {% endif %}
                 </ul>
               </li>

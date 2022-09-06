@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.shortcuts import render,redirect
-from .forms import RegisterForm,LoginForm
+from .forms import RegisterForm,LoginForm,UpdatePostForm
+from blog.models import Post
 
 
 def user_register(request):
@@ -44,3 +45,32 @@ def user_logout(request):
         logout(request)
         messages.success(request,'thanks')
     return redirect('/')   
+
+def user_profile(request):
+    post = Post.objects.filter(author=request.user)
+    context = {
+        'posts':post
+    }
+    return render(request,'user/profile.html',context)    
+
+
+def user_update_post(request,post_id):
+    post = Post.objects.filter(author=request.user)
+    post_update = Post.objects.get(id=post_id)
+    if request.method == 'POST':
+        form = UpdatePostForm(request.POST,instance=post_update)
+        if form.is_valid():
+            n = form.save(commit=False)
+            n.content = form.cleaned_data.get('content')
+            n.save()
+            messages.success(request,'Updated successfully')
+            return redirect('user:user_profile')
+    else:
+        form = UpdatePostForm(instance=post_update) 
+    context = {
+        'posts':post,
+        'form':form
+        
+        
+    }
+    return render(request,'user/updatepost.html',context)    

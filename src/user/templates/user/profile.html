@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}profile{% endblock title %}
+{% block  sidebar %}{% endblock sidebar %}
+{% block content_main %}
+{% endblock content_main %}
+{% block account %}
+<div class="container mx-auto">
+    <div class="row mx-auto">
+        <div class="col-md-3 col-lg-6 shadow-sm p-3 mx-auto text-center my-3">
+            <img src="{{request.user.profile.image.url}}" alt="" class="img-fluid rounded-circle" width='150px'>
+            <div class="mt-2">
+                <a href="" class="btn btn-secondary btn-sm">Edit Profile
+                    <i class="fa fa-edit fa-xs" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-9 col-lg-9 my-3 shadow-sm p-3 mx-auto text-center">
+            <p class="text-capitalize my-0">your name is : mohamed</p>
+            <p class="text-capitalize my-0">your email is : mahmedtuny12@gmail.com</p>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto text-center">
+            <h4 class="text-capitalize my-3">total of your post <span>({{posts.count}})</span></h4>
+            <h4 class="text-capitalize text-bg-dark p-2">your post </h4>
+            <ul class="navbar-nav">
+                {% for post in posts %}
+                <li class="nav-item">
+                    <a href="{% url 'user:user_update_post' post.id %}" class="nav-link border-bottom text-capitalize">{{post.title}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+         
+            <nav aria-label="Page navigation example ">
+                <ul class="pagination mx-auto my-3">
+                  <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  <li class="page-item"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+       
+            <div class="d-flex my-3">
+                <a href="" class="btn btn-secondary w-100 ">Create a New Post</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock account %}
