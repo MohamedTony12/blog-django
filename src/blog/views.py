@@ -2,18 +2,26 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import Post,Comment
 from .forms import FormCommnet
+from django.core.paginator import PageNotAnInteger,Paginator,EmptyPage
 
 
 def blog_home(request):
     post = Post.objects.all()
+    paginator = Paginator(post,2)
+    page = request.GET.get('page')
+    try:
+        post = paginator.page(page)
+    except PageNotAnInteger:
+        post = paginator.page(1)
+    except:
+        post = paginator.page(paginator.num_pages)        
     context = {
-        'posts': post
+        'posts': post,
     }
     return render(request, 'blog/index.html', context)
 
 
 def post_detail(request,post_id):
-    user = request.user
     post = get_object_or_404(Post,id=post_id)
     comment = Comment.objects.filter(post=post)
     if request.method == 'POST':
