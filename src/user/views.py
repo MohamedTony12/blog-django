@@ -2,7 +2,7 @@ from pydoc import pager
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.shortcuts import render,redirect
-from .forms import RegisterForm,LoginForm,UpdatePostForm
+from .forms import RegisterForm,LoginForm,UpdatePostForm,UpdateImageProfile,UserUpdate
 from blog.models import Post
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
@@ -51,7 +51,8 @@ def user_logout(request):
 
 @login_required(login_url='user:user_login')
 def user_profile(request):
-    post = Post.objects.filter(author=request.user)
+    post = Post.objects.filter(author=request.user).order_by('-create_at')
+    post_count = Post.objects.filter(author=request.user)
     paginator = Paginator(post,2)
     page = request.GET.get('page')
     try:
@@ -62,7 +63,8 @@ def user_profile(request):
         post = paginator.pag(paginator.num_pages)        
     context = {
         'posts':post,
-        'page':page
+        'page':page,
+        'post_count':post_count
     }
     return render(request,'user/profile.html',context)    
 
@@ -74,6 +76,7 @@ def user_update_post(request,post_id):
         form = UpdatePostForm(request.POST,instance=post_update)
         if form.is_valid():
             n = form.save(commit=False)
+            n.title = form.cleaned_data.get('title')
             n.content = form.cleaned_data.get('content')
             n.save()
             messages.success(request,'Updated successfully')
@@ -82,8 +85,42 @@ def user_update_post(request,post_id):
         form = UpdatePostForm(instance=post_update) 
     context = {
         'posts':post,
-        'form':form
-        
-        
+        'form':form,
+        'post_update':post_update
+
     }
     return render(request,'user/updatepost.html',context)    
+
+
+def edit_profile_user(request):
+    if request.method == 'POST':
+        form_user_edit = UserUpdate(request.POST,instance=request.user)
+        form_user_image = UpdateImageProfile(request.POST,request.FILES,instance=request.user.profile)
+        if form_user_edit.is_valid() and form_user_image.is_valid():
+            n_u = form_user_edit.save(commit=False)
+            n_p = form_user_image.save(commit=False)
+            n_u.username = form_user_edit.cleaned_data.get('username')
+            n_u.email = form_user_edit.cleaned_data.get('email')
+            n_p.image = form_user_image.cleaned_data['image']
+            n_u.save()
+            n_p.save()
+            messages.success(request,'Edited was Successfully')
+            return redirect('user:user_profile')
+    else:
+        form_user_edit = UserUpdate(instance=request.user)
+        form_user_image = UpdateImageProfile(request.POST,request.FILES,instance=request.user.profile)
+
+    context = {
+            'user_form':form_user_edit,
+            'profile_form':form_user_image,
+            
+            
+        }
+    return render(request,'user/updateuserprofile.html',context)    
+
+def post_delete(request,post_id):
+    post = Post.objects.get(id=post_id)
+    post.delete()
+    messages.success(request,'deleted was Successfully')
+    return redirect('user:user_profile')
+    

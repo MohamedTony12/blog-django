@@ -11,24 +11,15 @@
       </a>
     </li>
     <li class="page-item"><a class="page-link">{{page.number}}</a></li>
+ 
+    {% endif %} 
+
+
+    {% if page.has_next %}
     <li class="page-item">
       <a class="page-link">{{page.paginator.num_pages }}</a>
     </li>
-    <li class="page-item">
-      <a class="page-link disabled" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-    {% endif %} {% if page.has_next %}
-    <li class="page-item">
-      <a class="page-link disabled" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-    <li class="page-item"><a class="page-link">{{page.number}}</a></li>
-    <li class="page-item">
-      <a class="page-link">{{page.paginator.num_pages }}</a>
-    </li>
+
     <li class="page-item">
       <a
         class="page-link"

@@ -15,21 +15,21 @@
                 <p>No picture yet</p>
             {% endif %}
             <div class="mt-2">
-                <a href="" class="btn btn-secondary btn-sm">Edit Profile
+                <a href="{% url 'user:edit_profile_user' %}" class="btn btn-secondary btn-sm">Edit Profile
                     <i class="fa fa-edit fa-xs" aria-hidden="true"></i>
                 </a>
             </div>
         </div>
         <div class="col-md-9 col-lg-9 my-3 shadow-sm p-3 mx-auto text-center">
-            <p class="text-capitalize my-0">your name is : mohamed</p>
-            <p class="text-capitalize my-0">your email is : mahmedtuny12@gmail.com</p>
+            <p class="text-capitalize my-0">your name is : {{request.user.username}}</p>
+            <p class="text-capitalize my-0">your email is : {{request.user.email}}</p>
         </div>
     </div>
 </div>
 <div class="container">
     <div class="row">
         <div class="col-md-6 mx-auto text-center">
-            <h4 class="text-capitalize my-3">total of your post <span>({{posts.count}})</span></h4>
+            <h4 class="text-capitalize my-3">total of your post <span>({{post_count.count}})</span></h4>
             <h4 class="text-capitalize text-bg-dark p-2">your post </h4>
             <ul class="navbar-nav">
                 {% for post in posts %}
@@ -42,7 +42,7 @@
             {% include 'pagination.html' with page=posts %}
        
             <div class="d-flex my-3">
-                <a href="" class="btn btn-secondary w-100 ">Create a New Post</a>
+                <a href="{% url 'blog:create_new_post' %}" class="btn btn-secondary w-100 ">Create a New Post</a>
             </div>
         </div>
     </div>

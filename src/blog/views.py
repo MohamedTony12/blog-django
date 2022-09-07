@@ -1,19 +1,26 @@
 
+from django.contrib import messages
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import Post,Comment
-from .forms import FormCommnet
+from .forms import FormCommnet,CreateNewPostForm
 from django.core.paginator import PageNotAnInteger,Paginator,EmptyPage
+from django.contrib.auth.decorators import login_required
 
 
 def blog_home(request):
-    post = Post.objects.all()
+    if 'q' in request.GET:
+        q = request.GET['q']
+        post = Post.objects.filter(title__icontains=q)
+    else:
+        post = Post.objects.all().order_by('-create_at')
+        
     paginator = Paginator(post,2)
     page = request.GET.get('page')
     try:
         post = paginator.page(page)
     except PageNotAnInteger:
         post = paginator.page(1)
-    except:
+    except EmptyPage:
         post = paginator.page(paginator.num_pages)        
     context = {
         'posts': post,
@@ -55,3 +62,24 @@ def comment_read_all(request,comment_id,post_id):
 
 
 
+@login_required(login_url='user:user_login')
+def create_new_post(request):
+    if request.method == 'POST':
+        form = CreateNewPostForm(request.POST)
+        if form.is_valid():
+            n = form.save(commit=False)
+            n.author = request.user
+            n.title = form.cleaned_data.get('title')  
+            n.content = form.cleaned_data.get('content') 
+            n.save()
+            messages.success(request,'Post Created Successfully') 
+            return redirect('/')
+    else:
+        form = CreateNewPostForm(request.POST) 
+
+    return render(request, 'blog/createpost.html', {'form':form})    
+
+
+
+    
+       
